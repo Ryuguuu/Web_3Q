@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>新規作成 - 家計簿アプリ</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>収支項目の新規作成</h1>
+      <a href="/items" class="btn btn-secondary">一覧に戻る</a>
+    </header>
+    
+    <% if (error) { %>
+      <div class="error-message"><%= error %></div>
+    <% } %>
+    
+    <form method="POST" action="/items/create" class="item-form">
+      <div class="form-group">
+        <label for="event">項目名 <span class="required">*</span></label>
+        <input type="text" id="event" name="event" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="amount">金額 <span class="required">*</span></label>
+        <input type="number" id="amount" name="amount" min="1" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="type">収支区分 <span class="required">*</span></label>
+        <select id="type" name="type" required>
+          <option value="">選択してください</option>
+          <option value="Income">収入</option>
+          <option value="Expense">支出</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="memo">メモ</label>
+        <textarea id="memo" name="memo" rows="4"></textarea>
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">作成</button>
+        <a href="/items" class="btn btn-secondary">キャンセル</a>
+      </div>
+    </form>
+  </div>
+</body>
+</html>
+

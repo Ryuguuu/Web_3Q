@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>詳細 - 家計簿アプリ</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>収支項目の詳細</h1>
+      <a href="/items" class="btn btn-secondary">一覧に戻る</a>
+    </header>
+    
+    <div class="detail-container">
+      <div class="detail-item">
+        <label>項目名</label>
+        <p><%= item.event %></p>
+      </div>
+      
+      <div class="detail-item">
+        <label>金額</label>
+        <p class="amount <%= item.type === 'Income' ? 'income' : 'expense' %>">
+          <%= item.type === 'Income' ? '+' : '-' %>¥<%= item.amount.toLocaleString() %>
+        </p>
+      </div>
+      
+      <div class="detail-item">
+        <label>収支区分</label>
+        <p><%= item.type === 'Income' ? '収入' : '支出' %></p>
+      </div>
+      
+      <div class="detail-item">
+        <label>日付</label>
+        <p><%= new Date(item.createdAt).toLocaleString('ja-JP') %></p>
+      </div>
+      
+      <% if (item.memo) { %>
+        <div class="detail-item">
+          <label>メモ</label>
+          <p class="memo"><%= item.memo %></p>
+        </div>
+      <% } %>
+      
+      <div class="detail-actions">
+        <a href="/items/edit/<%= item.id %>" class="btn btn-primary">編集</a>
+        <form method="POST" action="/items/delete/<%= item.id %>" style="display: inline;" onsubmit="return confirm('本当に削除しますか？');">
+          <button type="submit" class="btn btn-danger">削除</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+

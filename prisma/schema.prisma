@@ -1,0 +1,34 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  items     Item[]
+  createdAt DateTime @default(now())
+}
+
+model Item {
+  id          Int      @id @default(autoincrement())
+  userid      Int
+  amount      Int
+  type        String   // 収入（Income）か支出(Expense)か
+  event       String   // 収支項目の名前（おやつ代、お小遣いなど）
+  memo        String?  // メモ欄（オプション）
+  createdAt   DateTime @default(now())
+  user        User     @relation(fields: [userid], references: [id], onDelete: Cascade)
+}

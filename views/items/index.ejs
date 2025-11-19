@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>収支一覧 - 家計簿アプリ</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>家計簿アプリ</h1>
+      <form method="POST" action="/auth/logout" style="display: inline;">
+        <button type="submit" class="btn btn-secondary">ログアウト</button>
+      </form>
+    </header>
+    
+    <!-- サマリー表示 -->
+    <div class="summary">
+      <div class="summary-item income">
+        <h3>総収入</h3>
+        <p class="amount">¥<%= totalIncome.toLocaleString() %></p>
+      </div>
+      <div class="summary-item expense">
+        <h3>総支出</h3>
+        <p class="amount">¥<%= totalExpense.toLocaleString() %></p>
+      </div>
+      <div class="summary-item balance">
+        <h3>残高</h3>
+        <p class="amount <%= balance >= 0 ? 'positive' : 'negative' %>">
+          ¥<%= balance.toLocaleString() %>
+        </p>
+      </div>
+    </div>
+    
+    <!-- フィルタ -->
+    <div class="filters">
+      <form method="GET" action="/items" class="filter-form">
+        <div class="filter-group">
+          <label for="type">収支区分</label>
+          <select id="type" name="type">
+            <option value="all" <%= typeFilter === 'all' ? 'selected' : '' %>>すべて</option>
+            <option value="Income" <%= typeFilter === 'Income' ? 'selected' : '' %>>収入のみ</option>
+            <option value="Expense" <%= typeFilter === 'Expense' ? 'selected' : '' %>>支出のみ</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label for="startDate">開始日</label>
+          <input type="date" id="startDate" name="startDate" value="<%= startDate || '' %>">
+        </div>
+        
+        <div class="filter-group">
+          <label for="endDate">終了日</label>
+          <input type="date" id="endDate" name="endDate" value="<%= endDate || '' %>">
+        </div>
+        
+        <button type="submit" class="btn btn-primary">フィルタ適用</button>
+        <a href="/items" class="btn btn-secondary">リセット</a>
+      </form>
+    </div>
+    
+    <!-- 新規作成ボタン -->
+    <div class="actions">
+      <a href="/items/create" class="btn btn-primary">新規作成</a>
+    </div>
+    
+    <!-- 収支一覧 -->
+    <div class="items-list">
+      <% if (items.length === 0) { %>
+        <p class="no-items">収支項目がありません</p>
+      <% } else { %>
+        <table class="items-table">
+          <thead>
+            <tr>
+              <th>日付</th>
+              <th>項目名</th>
+              <th>金額</th>
+              <th>収支区分</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% items.forEach(function(item) { %>
+              <tr>
+                <td><%= new Date(item.createdAt).toLocaleDateString('ja-JP') %></td>
+                <td>
+                  <a href="/items/detail/<%= item.id %>" class="item-link"><%= item.event %></a>
+                </td>
+                <td class="amount <%= item.type === 'Income' ? 'income' : 'expense' %>">
+                  <%= item.type === 'Income' ? '+' : '-' %>¥<%= item.amount.toLocaleString() %>
+                </td>
+                <td><%= item.type === 'Income' ? '収入' : '支出' %></td>
+                <td class="actions-cell">
+                  <a href="/items/edit/<%= item.id %>" class="btn btn-small">編集</a>
+                  <form method="POST" action="/items/delete/<%= item.id %>" style="display: inline;" onsubmit="return confirm('本当に削除しますか？');">
+                    <button type="submit" class="btn btn-small btn-danger">削除</button>
+                  </form>
+                </td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      <% } %>
+    </div>
+  </div>
+</body>
+</html>
+

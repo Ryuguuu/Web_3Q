@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>新規登録 - 家計簿アプリ</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="auth-container">
+      <h1>新規登録</h1>
+      
+      <% if (error) { %>
+        <div class="error-message"><%= error %></div>
+      <% } %>
+      
+      <form method="POST" action="/auth/register" class="auth-form">
+        <div class="form-group">
+          <label for="email">メールアドレス</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="password">パスワード（6文字以上）</label>
+          <input type="password" id="password" name="password" required minlength="6">
+        </div>
+        
+        <div class="form-group">
+          <label for="confirmPassword">パスワード（確認）</label>
+          <input type="password" id="confirmPassword" name="confirmPassword" required minlength="6">
+        </div>
+        
+        <button type="submit" class="btn btn-primary">登録</button>
+      </form>
+      
+      <div class="auth-link">
+        <a href="/auth/login">ログインはこちら</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+
